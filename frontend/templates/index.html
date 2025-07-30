@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>TaskTuner - Task Input & Schedule</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f4f4f4; }
+        h1, h2, h3 { color: #333; }
+        table { width: 100%; border-collapse: collapse; margin-bottom: 20px; background: white; box-shadow: 0 0 5px rgba(0,0,0,0.1); }
+        th, td { border: 1px solid #ccc; padding: 10px; text-align: left; }
+        th { background-color: #e9e9e9; }
+        input[type="number"] { width: 60px; padding: 5px; border-radius: 4px; border: 1px solid #ccc; }
+        input[type="submit"] { padding: 8px 15px; background-color: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer; }
+        .done-checkbox { margin-left: 10px; }
+        .flash { padding: 10px; margin-bottom: 20px; border-radius: 4px; }
+        .flash-success { background-color: #d4edda; color: #155724; }
+        .flash-error { background-color: #f8d7da; color: #721c24; }
+    </style>
+</head>
+<body>
+    <h1>TaskTuner – Task Management & Schedule</h1>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="flash flash-{{ category }}">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <h2>Tasks and Effort Input</h2>
+    <form action="{{ url_for('update_effort') }}" method="post">
+        <table>
+            <tr>
+                <th>Task Name</th>
+                <th>Priority</th>
+                <th>Effort (hours)</th>
+            </tr>
+            {% for task in tasks %}
+            <tr>
+                <td>{{ task.name }} <input type="hidden" name="task_id" value="{{ task.id }}"></td>
+                <td>{{ task.priority }}</td>
+                <td>
+                    <input type="number" name="hours" min="1" value="{{ efforts.get(task.id, '') }}" placeholder="Enter hours">
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+        <input type="submit" value="Submit Efforts & View Schedule">
+    </form>
+
+    <h2>Scheduled Tasks</h2>
+    {% if schedule %}
+        {% for date, day_tasks in schedule.items() %}
+            <h3>{{ date }}</h3>
+            <ul>
+                {% for task in day_tasks %}
+                    <li>
+                        {{ task.name }} (Priority: {{ task.priority }}, Effort: {{ task.effort }} hrs)
+                        <input type="checkbox" class="done-checkbox"> Done
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endfor %}
+    {% else %}
+        <p>No schedule available. Please input efforts and submit.</p>
+    {% endif %}
+</body>
+</html>
