@@ -40,7 +40,7 @@ TaskTuner/
 
 ### 1. Clone the Repo
 ```bash
-git clone https://github.com/yourname/tasktuner.git
+git clone https://github.com/mohitbele79/TaskTuner_by_Fastapi_flask.git
 cd tasktuner
 
 ### 2. Backend Setup (FastAPI) 
@@ -73,6 +73,6 @@ Visit: http://127.0.0.1:5000
 cd backend
 pytest
 
-## Screenshots / Demo
+
 
 
